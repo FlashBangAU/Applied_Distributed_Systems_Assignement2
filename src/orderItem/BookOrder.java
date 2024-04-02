@@ -9,5 +9,49 @@ package orderItem;
  * @author User
  */
 public class BookOrder {
+    int quantity;
+    double unitPrice;
+    double tax;
+    double totalBill;
+
+    public BookOrder(int quantity, double unitPrice, double tax, double totalBill) {
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.tax = tax;
+        this.totalBill = totalBill;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public double getTax() {
+        return tax;
+    }
+
+    public void setTax(double tax) {
+        this.tax = tax;
+    }
+
+    public double getTotalBill() {
+        return totalBill;
+    }
+
+    public void setTotalBill(double totalBill) {
+        this.totalBill = totalBill;
+    }
+    
     
 }
