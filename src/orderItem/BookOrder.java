@@ -53,5 +53,13 @@ public class BookOrder {
         this.totalBill = totalBill;
     }
     
+    public String excuteTask(){
+        
+        return null;
+    }
     
+    public String getResult(){
+        
+        return null;  
+    }
 }
