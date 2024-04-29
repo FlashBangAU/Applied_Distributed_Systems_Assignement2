@@ -1,24 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package orderItem;
+
+import java.io.Serializable;
 
 /**
  *
  * @author User
  */
-public class MovieOrder {
-    int quantity;
-    double unitPrice;
-    double tax;
-    double totalBill;
+public class MovieOrder implements Task, Serializable {
 
-    public MovieOrder(int quantity, double unitPrice, double tax, double totalBill) {
+    private int quantity;
+    private double unitPrice;
+    private double tax;
+    private double totalBill;
+
+    public MovieOrder() {
+
+    }
+
+    public MovieOrder(int quantity, double unitPrice) {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
-        this.tax = tax;
-        this.totalBill = totalBill;
     }
 
     public int getQuantity() {
@@ -37,29 +38,15 @@ public class MovieOrder {
         this.unitPrice = unitPrice;
     }
 
-    public double getTax() {
-        return tax;
+    public String getResult() {
+        return "Number of Movies:" + quantity + "  Price:" + unitPrice + " Tax:" + tax + " Bill Total for Book:" + totalBill;
     }
 
-    public void setTax(double tax) {
-        this.tax = tax;
-    }
+    public void excuteTask() {
+        final double COST_PER_MOVIE = 0.30;
 
-    public double getTotalBill() {
-        return totalBill;
-    }
-
-    public void setTotalBill(double totalBill) {
-        this.totalBill = totalBill;
-    }
-    
-    public String excuteTask(){
-        
-        return null;
-    }
-    
-    public String getResult(){
-        
-        return null;  
+        double combined = unitPrice * quantity;
+        tax = COST_PER_MOVIE * combined;
+        totalBill = tax + combined;
     }
 }
