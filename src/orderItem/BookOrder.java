@@ -12,21 +12,17 @@ import java.io.Serializable;
  */
 public class BookOrder implements Task, Serializable {
 
-    private int quantity;
+    private double quantity;
     private double unitPrice;
     private double tax;
     private double totalBill;
 
-    public BookOrder() {
-
-    }
-
-    public BookOrder(int quantity, double unitPrice) {
+    public BookOrder(double quantity, double unitPrice) {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
 
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
@@ -42,10 +38,12 @@ public class BookOrder implements Task, Serializable {
         this.unitPrice = unitPrice;
     }
 
+    @Override
     public String getResult() {
-        return "Number of Books:" + quantity + "  Price:" + unitPrice + " Tax:" + tax + " Bill Total for Book:" + totalBill;
+        return String.format("Number of Books:%.2f      Price:$%.2f     Tax:$%.2f    Bill Total for Book:$%.2f",quantity,unitPrice,tax,totalBill);
     }
 
+    @Override
     public void excuteTask() {
         final double COST_PER_BOOK = 0.10;
 

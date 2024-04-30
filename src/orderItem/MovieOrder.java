@@ -8,21 +8,17 @@ import java.io.Serializable;
  */
 public class MovieOrder implements Task, Serializable {
 
-    private int quantity;
+    private double quantity;
     private double unitPrice;
     private double tax;
     private double totalBill;
 
-    public MovieOrder() {
-
-    }
-
-    public MovieOrder(int quantity, double unitPrice) {
+    public MovieOrder(double quantity, double unitPrice) {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
 
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
@@ -38,10 +34,12 @@ public class MovieOrder implements Task, Serializable {
         this.unitPrice = unitPrice;
     }
 
+    @Override
     public String getResult() {
-        return "Number of Movies:" + quantity + "  Price:" + unitPrice + " Tax:" + tax + " Bill Total for Book:" + totalBill;
+        return String.format("Number of Movies:%.2f      Price:$%.2f     Tax:$%.2f    Bill Total for Movie:$%.2f",quantity,unitPrice,tax,totalBill);
     }
 
+    @Override
     public void excuteTask() {
         final double COST_PER_MOVIE = 0.30;
 
