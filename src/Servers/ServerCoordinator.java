@@ -4,8 +4,6 @@
  */
 package Servers;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,10 +11,6 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import orderItem.BookOrder;
-import orderItem.MovieOrder;
 import orderItem.Task;
 
 /**
@@ -27,15 +21,18 @@ public class ServerCoordinator {
     //This class is to be used by TcpServer class, not public.
 
     public static void main(String args[]) {
+        int orderNum = 1;
         //Server waits for client to connect on same port
         try {
             final int serverPort = 3000;
             ServerSocket listenSocket = new ServerSocket(serverPort);
+            System.out.println("TCP ServerCoordinator running..." + "\n");
             while (true) {
                 //listening for client
                 Socket clientSocket = listenSocket.accept();
                 Connection c = new Connection(clientSocket);
-                System.out.println("Recieving data from client: " + clientSocket.getPort());
+                System.out.println("ServerCoordinator Recieved Client Object Number: " + orderNum);
+                orderNum++;
             }
         } catch (IOException e) {
             System.out.println("Listen :" + e.getMessage());
@@ -67,18 +64,19 @@ class Connection extends Thread {
         try { // an echo server
             //data recieved
             Task t = (Task) in.readObject();
-            System.out.println(t);
             if (t.toString().contains("BookOrder")) {
-                System.out.print("Sending data to ServerBook");
-                t = (Task) navigateClient(3001);
+                System.out.println("Sending book object to ServerBook ....");
+                t = (Task) navigateClient(3001, t);
             } else if (t.toString().contains("MovieOrder")) {
-                System.out.print("Sending data to ServerMovie");
+                System.out.println("Sending movie object to ServerMovie ....");
+                t = (Task) navigateClient(3002, t);
             }
-            t.getResult();
 
             //data is sent back to client
+            System.out.println("Returning Order Back to Original Client ....");
             out.writeObject(t);
-
+            
+            System.out.println();
         } catch (EOFException e) {
             System.out.println("EOF:" + e.getMessage());
         } catch (IOException e) {
@@ -89,13 +87,13 @@ class Connection extends Thread {
             try {
                 clientSocket.close();
             } catch (IOException e) {/*close failed*/
+                System.out.println("clientsocket closed");
             }
         }
     }
 
-    public static Object navigateClient(int serverPort) throws ClassNotFoundException {
+    public static Object navigateClient(int serverPort, Task t) throws ClassNotFoundException {
         Socket s = null;
-        Task t = null;
         String hostName = "localhost";
         try {
 
@@ -108,10 +106,8 @@ class Connection extends Thread {
             in = new ObjectInputStream(s.getInputStream());
             
             //send message
-            System.out.println("SENDING OBJECT TO SERVER..........");
             out.writeObject(t);
 
-            System.out.println("RECIEVING COMPUTED OBJECT FROM SERVER........");
             t = (Task) in.readObject();
 
         } catch (UnknownHostException e) {

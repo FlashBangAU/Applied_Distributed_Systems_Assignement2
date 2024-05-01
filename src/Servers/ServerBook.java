@@ -19,14 +19,16 @@ import orderItem.Task;
 public class ServerBook {
     
     public static void main(String args[]) {
-
+        int orderNum = 1;
         try {
             int serverPort = 3001;
             ServerSocket listenSocket = new ServerSocket(serverPort);
-            System.out.println("TCP Server running...");
+            System.out.println("TCP ServerBook running..."+"\n");
             while (true) {
                 Socket clientSocket = listenSocket.accept();
-                Connection c = new Connection(clientSocket);
+                BookConnection c = new BookConnection(clientSocket);
+                System.out.println("ServerBook Recieved Client Object Number: " + orderNum);
+                orderNum++;
             }
 
         } catch (IOException e) {
@@ -35,50 +37,44 @@ public class ServerBook {
     }
 }
 
-class Connection extends Thread {
-
+class BookConnection extends Thread {    
     ObjectInputStream in;
     ObjectOutputStream out;
     Socket clientSocket;
 
-    public Connection(Socket aClientSocket) {
-
+    public BookConnection(Socket aClientSocket) {
         try {
             clientSocket = aClientSocket;
-            in = new ObjectInputStream(clientSocket.getInputStream());
             out = new ObjectOutputStream(clientSocket.getOutputStream());
+            in = new ObjectInputStream(clientSocket.getInputStream());
             this.start();
         } catch (IOException e) {
             System.out.println("Connection:" + e.getMessage());
         }
     }
 
-    public void run() {
-
+    public void run() {     
         try {
-
             Task t = (Task) in.readObject();
-            System.out.println("Received book to compute cost");
             //calculate cost
-            t.excuteTask();
+            t.executeTask();
 
             out.writeObject(t);
-            System.out.println("Sent book with cost computed");
+            System.out.println("Computed Total Bill for Book Order. Sending back to client....");
 
             System.out.println("");
-
         } catch (EOFException e) {
             System.out.println("EOF:" + e.getMessage());
         } catch (IOException e) {
-            System.out.println("readline:" + e.getMessage());
+            System.out.println("IOException:" + e.getMessage());
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
         } finally {
             try {
                 clientSocket.close();
-            } catch (IOException e) {/*close failed*/
+            } catch (IOException e) {
+                System.out.println("Error closing client socket: " + e.getMessage());
             }
         }
-
     }
 }
