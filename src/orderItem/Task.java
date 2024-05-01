@@ -9,6 +9,6 @@ package orderItem;
  * @author User
  */
 public interface Task {
-    public void excuteTask();
+    public void executeTask();
     public String getResult();
 }

@@ -44,7 +44,7 @@ public class BookOrder implements Task, Serializable {
     }
 
     @Override
-    public void excuteTask() {
+    public void executeTask() {
         final double COST_PER_BOOK = 0.10;
 
         double combined = unitPrice * quantity;

@@ -40,7 +40,7 @@ public class MovieOrder implements Task, Serializable {
     }
 
     @Override
-    public void excuteTask() {
+    public void executeTask() {
         final double COST_PER_MOVIE = 0.30;
 
         double combined = unitPrice * quantity;
