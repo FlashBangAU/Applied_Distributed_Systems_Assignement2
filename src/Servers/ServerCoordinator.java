@@ -14,8 +14,8 @@ import java.net.UnknownHostException;
 import orderItem.Task;
 
 /**
- *
- * @author User
+ * This Server coordinates where each object type is to be sent to another server to be computed
+ * @author HUGHEN FLINT 12177330
  */
 public class ServerCoordinator {
     //This class is to be used by TcpServer class, not public.
@@ -64,6 +64,8 @@ class Connection extends Thread {
         try { // an echo server
             //data recieved
             Task t = (Task) in.readObject();
+            //t is observed to have a BookOrder in it or MovieOrder
+            //t is then sent to navigateClient with appropriate serverport number
             if (t.toString().contains("BookOrder")) {
                 System.out.println("Sending book object to ServerBook ....");
                 t = (Task) navigateClient(3001, t);
@@ -75,7 +77,7 @@ class Connection extends Thread {
             //data is sent back to client
             System.out.println("Returning Order Back to Original Client ....");
             out.writeObject(t);
-            
+
             System.out.println();
         } catch (EOFException e) {
             System.out.println("EOF:" + e.getMessage());
@@ -92,6 +94,7 @@ class Connection extends Thread {
         }
     }
 
+    //A TCP client to send data to another Server and receive data from those servers
     public static Object navigateClient(int serverPort, Task t) throws ClassNotFoundException {
         Socket s = null;
         String hostName = "localhost";
@@ -99,15 +102,16 @@ class Connection extends Thread {
 
             s = new Socket(hostName, serverPort);
 
-            ObjectInputStream in = null;
-            ObjectOutputStream out = null;
+            ObjectInputStream in;
+            ObjectOutputStream out;
 
             out = new ObjectOutputStream(s.getOutputStream());
             in = new ObjectInputStream(s.getInputStream());
-            
-            //send message
+
+            //send object
             out.writeObject(t);
 
+            //receive object
             t = (Task) in.readObject();
 
         } catch (UnknownHostException e) {
@@ -124,6 +128,7 @@ class Connection extends Thread {
                 System.out.println("close:" + e.getMessage());
             }
         }
+        //return object
         return t;
     }
 }

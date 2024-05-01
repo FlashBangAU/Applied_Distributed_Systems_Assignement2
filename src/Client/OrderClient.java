@@ -14,12 +14,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- *
- * @author User
+ *  This is a client end of a TCP Connection that receives user input for a purchase of a Book or Movie
+ * @author HUGHEN FLINT 12177330
  */
 public class OrderClient {
 
@@ -28,10 +27,9 @@ public class OrderClient {
             //initialises variables
             String inputStr;
             int choice;
-            int amount = 0;
-            double price = 0;
+            int amount;
+            double price;
             String orderType1 = null;
-            String orderType2 = null;
 
             Task t = null;
 
@@ -46,36 +44,38 @@ public class OrderClient {
                     + "3.Exit" + "\n"
                     + "*********************" + "\n"
                     + "Enter your option: ");
+            //user selects their choice
             inputStr = input.nextLine();
             while (!inputStr.matches("[1-3]+")) {
-                System.out.println("You must enter appropriate number."+"\n");
+                System.out.println("You must enter appropriate number." + "\n");
                 System.out.print("Enter your option: ");
                 inputStr = input.nextLine();
             }
             choice = Integer.parseInt(inputStr);
 
+            //sets values for Strings in further questions or to exit application
             switch (choice) {
                 case 1:
                     orderType1 = "book";
-                    orderType2 = "BookOrder";
                     break;
                 case 2:
                     orderType1 = "movie";
-                    orderType2 = "MovieOrder";
                     break;
                 case 3:
                     System.exit(0);
             }
 
+            //user enters quantity that they would like to purchase
             System.out.print("Enter the number of " + orderType1 + "s: ");
             inputStr = input.nextLine();
             while (!inputStr.matches("[0-9]+") || Integer.parseInt(inputStr) <= 0) {
-                System.out.println("You must enter appropriate number."+"\n");
+                System.out.println("You must enter appropriate number." + "\n");
                 System.out.print("Enter the number of " + orderType1 + "s: ");
                 inputStr = input.nextLine();
             }
             amount = Integer.parseInt(inputStr);
 
+            //user enters price of item that they are purchasing
             System.out.print("Enter the " + orderType1 + " price: ");
             inputStr = input.nextLine();
             while (!inputStr.matches("[0-9.]+") || Double.parseDouble(inputStr) <= 0) {
@@ -94,25 +94,28 @@ public class OrderClient {
 
                 s = new Socket(hostName, serverPort);
 
-                ObjectInputStream in = null;
-                ObjectOutputStream out = null;
+                ObjectInputStream in;
+                ObjectOutputStream out;
 
                 out = new ObjectOutputStream(s.getOutputStream());
                 in = new ObjectInputStream(s.getInputStream());
 
+                //Task object is created with the inputed values to the appropriate server type
                 if (choice == 1) {
                     t = new BookOrder(amount, price);
                 } else if (choice == 2) {
                     t = new MovieOrder(amount, price);
                 }
 
-                //send message
+                //send object
                 System.out.println("SENDING OBJECT TO SERVER..........");
                 out.writeObject(t);
-
+                
+                //receive object
                 System.out.println("RECIEVING COMPUTED OBJECT FROM SERVER........");
                 t = (Task) in.readObject();
 
+                //prints total price along with tax, amount and price per unit
                 if (choice == 1) {
                     System.out.println(((BookOrder) t).getResult());
                 } else if (choice == 2) {
@@ -125,7 +128,7 @@ public class OrderClient {
                 System.out.println("EOF:" + e.getMessage());
             } catch (IOException e) {
                 System.out.println("IO:" + e.getMessage());
-            } catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 System.out.println("NullPointer:" + e.getMessage());
             } finally {
                 if (s != null)

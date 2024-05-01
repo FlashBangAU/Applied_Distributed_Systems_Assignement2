@@ -13,17 +13,17 @@ import java.net.Socket;
 import orderItem.Task;
 
 /**
- *
- * @author User
+ * This Server receives movie related objects to be computed then returned
+ * @author HUGHEN FLINT 12177330
  */
 public class ServerMovie {
 
     public static void main(String args[]) {
-        int orderNum =1;
+        int orderNum = 1;
         try {
             int serverPort = 3002;
             ServerSocket listenSocket = new ServerSocket(serverPort);
-            System.out.println("TCP ServerMovie running..."+"\n");
+            System.out.println("TCP ServerMovie running..." + "\n");
             while (true) {
                 Socket clientSocket = listenSocket.accept();
                 MovieConnection c = new MovieConnection(clientSocket);
@@ -38,10 +38,12 @@ public class ServerMovie {
 }
 
 class MovieConnection extends Thread {
+
     ObjectInputStream in;
     ObjectOutputStream out;
     Socket clientSocket;
 
+    //connection created
     public MovieConnection(Socket aClientSocket) {
 
         try {
@@ -57,10 +59,13 @@ class MovieConnection extends Thread {
     public void run() {
 
         try {
+            //object received
             Task t = (Task) in.readObject();
-            //calculate cost
+            
+            //calculate total cost and tax
             t.executeTask();
 
+            //returns object to server coordinator
             out.writeObject(t);
             System.out.println("Computed Total Bill for Movie Order. Sending back to client....");
 

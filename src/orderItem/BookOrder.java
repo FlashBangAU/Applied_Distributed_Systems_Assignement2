@@ -7,21 +7,23 @@ package orderItem;
 import java.io.Serializable;
 
 /**
- *
- * @author User
+ * BookOrder class contains 2 methods used by client and servers
+ * @author HUGHEN FLINT 12177330
  */
 public class BookOrder implements Task, Serializable {
-
+    //intilise values
     private double quantity;
     private double unitPrice;
     private double tax;
     private double totalBill;
 
+    //constructor
     public BookOrder(double quantity, double unitPrice) {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
-
+    
+    //getters and setters
     public double getQuantity() {
         return quantity;
     }
@@ -38,11 +40,13 @@ public class BookOrder implements Task, Serializable {
         this.unitPrice = unitPrice;
     }
 
+    //sets values to format to 2 decimal places and returns String
     @Override
     public String getResult() {
-        return String.format("Number of Books:%.2f      Price:$%.2f     Tax:$%.2f    Bill Total for Book:$%.2f",quantity,unitPrice,tax,totalBill);
+        return String.format("Number of Books:%.2f      Price:$%.2f     Tax:$%.2f    Bill Total for Book:$%.2f", quantity, unitPrice, tax, totalBill);
     }
 
+    //calculates tax and total amount for purchase
     @Override
     public void executeTask() {
         final double COST_PER_BOOK = 0.10;

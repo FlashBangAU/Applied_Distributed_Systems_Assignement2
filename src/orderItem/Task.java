@@ -5,10 +5,11 @@
 package orderItem;
 
 /**
- *
- * @author User
+ * This interface runs code in MovieOrder or BookOrder depending on type when called on
+ * @author HUGHEN FLINT 12177330
  */
 public interface Task {
     public void executeTask();
+
     public String getResult();
 }
