@@ -68,7 +68,7 @@ public class OrderClient {
             //user enters quantity that they would like to purchase
             System.out.print("Enter the number of " + orderType1 + "s: ");
             inputStr = input.nextLine();
-            while (!inputStr.matches("[0-9]+") || Integer.parseInt(inputStr) <= 0) {
+            while (!inputStr.matches("[0-9]+") || Integer.parseInt(inputStr) < 0) {
                 System.out.println("You must enter appropriate number." + "\n");
                 System.out.print("Enter the number of " + orderType1 + "s: ");
                 inputStr = input.nextLine();
@@ -78,8 +78,8 @@ public class OrderClient {
             //user enters price of item that they are purchasing
             System.out.print("Enter the " + orderType1 + " price: ");
             inputStr = input.nextLine();
-            while (!inputStr.matches("[0-9.]+") || Double.parseDouble(inputStr) <= 0) {
-                System.out.println("You must enter appropriate number.");
+            while (!inputStr.matches("[0-9.]+") || Double.parseDouble(inputStr) < 0) {
+                System.out.println("You must enter appropriate number."+"\n");
                 System.out.print("Enter the " + orderType1 + " price: ");
                 inputStr = input.nextLine();
             }
